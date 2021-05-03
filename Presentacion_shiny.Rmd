@@ -1,0 +1,102 @@
+---
+title: "Introducción a Shiny app de R"
+subtitle: "Subtítulo de la Presentación"
+author: "Pao Manzo"
+institute: "R-Ladies Guadalajara"
+date: "Mayo 2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - default
+      - rladies
+      - rladies-fonts
+    seal: false 
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "4:3"
+---
+text-align: justify
+
+```{r setup, include = FALSE}
+library(knitr)                              # paquete que trae funciones utiles para R Markdown
+library(rgdal)
+library(sf)  # manejo de informacion geografica 
+library(raster)
+library(ggplot2)
+# opciones predeterminadas
+knitr::opts_chunk$set(echo = FALSE,         # FALSE: los bloques de código NO se muestran
+                      dpi = 300,            # asegura gráficos de alta resolución
+                      warning = FALSE,      # los mensajes de advertencia NO se muestran
+                      error = FALSE)        # los mensajes de error NO se muestran
+```
+
+class: inverse, middle, center
+
+<img style="border-radius: 50%;" <img style="border-radius: 90%;"
+src="https://pbs.twimg.com/profile_images/1336029207244263431/kgX2oR9q_400x400.jpg"
+width="150px" />
+
+# Introducción a Shiny app de R
+## Mayo 2021
+
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+<img style="float:right" 
+src="http://minformatics.cl/wp/wp-content/uploads/2020/06/Shiny-1.jpg"
+width="100px"/>
+
+
+# R Shiny app
+
+
+### Descripción:
+
+.Justify[
+- R Shiny App es un paquete de R destinado al desarrollo de aplicaciones interactivas de visualización de datos. Permite la instalación de una aplicación web corriendo en R en un servidor, y que podremos personalizar de forma sencilla con sintaxis HTML, CSS o Javascript.
+
+### Componentes:
+Una app de shiny consta (al menos) de dos archivos:
+- Un script para la interfaz del usuario (ui.R), que recibe los inputs y muestra los outputs.
+- Un script para los cálculos (server.R) que realiza los cálculos necesarios.
+]
+
+---
+
+# R Shiny 
+<img src="http://ryouready.files.wordpress.com/2013/11/post-logo.png"
+/>
+
+<img src="https://shiny.rstudio.com/tutorial/written-tutorial/lesson1/images/01_hello.png"
+/>
+
+---
+
+class: middle, inverse
+
+.pull-left[
+# **Contacto**
+<br/>
+
+## R- Ladies Guadalajara
+]
+
+.pull-right[
+.right[
+<img style="border-radius: 90%;"
+src="https://pbs.twimg.com/profile_images/1336029207244263431/kgX2oR9q_400x400.jpg"
+width="150px" />
+
+[facebook.com/RLadiesGDL/](https://www.facebook.com/RLadiesGDL)<br/>
+[meetup.com/rladies-guadalajara](https://www.meetup.com/rladies-guadalajara/)<br/>
+[@RLadiesGDL](https://twitter.com/RLadiesGDL)<br/>
+[guadalajara@rladies.org](mailto:guadalajara@rladies.org)
+]
+]
+ 
