@@ -17,21 +17,10 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       ratio: "4:3"
+editor_options: 
+  chunk_output_type: inline
 ---
 text-align: justify
-
-```{r setup, include = FALSE}
-library(knitr)                              # paquete que trae funciones utiles para R Markdown
-library(rgdal)
-library(sf)  # manejo de informacion geografica 
-library(raster)
-library(ggplot2)
-# opciones predeterminadas
-knitr::opts_chunk$set(echo = FALSE,         # FALSE: los bloques de código NO se muestran
-                      dpi = 300,            # asegura gráficos de alta resolución
-                      warning = FALSE,      # los mensajes de advertencia NO se muestran
-                      error = FALSE)        # los mensajes de error NO se muestran
-```
 
 class: inverse, middle, center
 
@@ -41,8 +30,22 @@ width="150px" />
 
 # Introducción a Shiny app de R
 ## Mayo 2021
+---
+# Índice
+
+  ### 1. Descripción y usos de shiny.
+  ### 2. Referencias.
+  ### 3. Crear nuestro proyecto en el cual almacenaremos la shiny.
+  ### 4. Creación de la aplicación.
+
+#### Antes de iniciar:
+<ul>
+<li type= disc> Se les solicita respeto a los participantes de este espacio.
+<li type= disc> Siéntanse libre de preguntar cualquier duda.
+</ul>
 
 ---
+
 <style>
 body {
 text-align: justify}
@@ -55,10 +58,11 @@ width="100px"/>
 
 # R Shiny app
 
-
 ### Descripción:
 
 .Justify[
+- Shiny es un paquete que permite crear aplicaciones web interactivas, directamente desde Rstudio, este paquete viene instalado por defecto con Rstudio. Y tiene como finalidad la interacción gráfica con los datos.
+
 - R Shiny App es un paquete de R destinado al desarrollo de aplicaciones interactivas de visualización de datos. Permite la instalación de una aplicación web corriendo en R en un servidor, y que podremos personalizar de forma sencilla con sintaxis HTML, CSS o Javascript.
 
 ### Componentes:
@@ -69,13 +73,57 @@ Una app de shiny consta (al menos) de dos archivos:
 
 ---
 
-# R Shiny 
-<img src="http://ryouready.files.wordpress.com/2013/11/post-logo.png"
-/>
+# Referencias de shiny app 
+.Justify[
+[Sitio oficial de Shiny](https://shiny.rstudio.com/) donde hay una galeria de plataforma, artículos, foros y demás elaboradas son shiny de R. Shiny app tiene una gran comunidad de entusiasta desarrolladores que comparten lo elaborado con esta paquetería a los demás usuarios.
 
-<img src="https://shiny.rstudio.com/tutorial/written-tutorial/lesson1/images/01_hello.png"
-/>
+Aquí encontrarás un manual tambien llamada [hoja de referencia](https://shiny.rstudio.com/images/shiny-cheatsheet.pdf) en la cual se presenta las funciones que integra una shiny dividida por UI y Server.
 
+El paquete Shiny tiene once ejemplos incorporados que muestran a grandes razgos como funciona:
+```{r setup, include = T}
+library(shiny)
+#runExample ("01_hello")      # histograma
+#runExample ("02_text")       # resumen y tabla
+#runExample ("03_reactivity") # desplegables reactivos
+#runExample ("04_mpg")        # boxplot reactivos
+#runExample ("05_sliders")    # deslizadores reactivos
+#runExample ("06_tabsets")    # varias pestanas
+#runExample ("07_widgets")    # textos de ayuda y botones
+#runExample ("08_html")       # Shiny desde HTML
+#runExample ("09_upload")     # carga de archivos
+#runExample ("10_download")   # descarga de archivos
+#runExample ("11_timer")      # dia y hora
+```
+
+]
+---
+.Justify[
+###Libros y material electrónico
+- [Learn ggplot2 Using Shiny App - Keon Woong Moon](https://maximinshop.com/producto/learn-ggplot2-using-shiny-app/?fbclid=IwAR1nVVtDevqHXP_t_gVpvKhrjdKti4j7alwItUN8cFi-EBKYqH8DEKcgHMg)
+- [Interactive web-based data visualization with R, plotly, and shiny- Carson Sievert](https://xiscapericas.shinyapps.io/xiscape/)
+
+
+###Más ejemplo de shiny con sus código al público
+- [Portafolio de presentación de Xiscapericas](https://xiscapericas.shinyapps.io/xiscape/)
+- [Plataforma interactiva de Diego López](https://diego-lopezt.shinyapps.io/Poblacion_Economia/)
+- [Sitio web de R-Ladies GDL](https://rladiesgdl.shinyapps.io/sitio/)
+]
+---
+
+# Creación de una Shiny 
+Una aplicación shiny tiene 2 funciones o archivos, uno llamado ui en donde se describe la interfaz gráfica de la aplicación, y otro llamado server en donde se escribe la lógica de la aplicación.
+
+
+###Para crear una nueva aplicación shiny:
+
+- Haga click en la pestaña <b>Archivo</b>.
+- Seleccione la opción <b>Nuevo archivo</b>.
+- Seleccione <b>Shiny Web App</b>.
+- Ponga nombre a su aplicación <b>(Sugerencia: example)</b>.
+- En la opcion Application type, seleccione <b>Single File (app.R)</b>.
+- Guarde su aplicación en una carpeta de fácil acceso
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuHg-AliGCGMw9U8kn9D5p0g9mc_sF8vLajA&usqp=CAU" style=float:center>
 ---
 
 class: middle, inverse
@@ -99,4 +147,3 @@ width="150px" />
 [guadalajara@rladies.org](mailto:guadalajara@rladies.org)
 ]
 ]
- 
