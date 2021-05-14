@@ -34,15 +34,13 @@ class: inverse, middle, center
 
   ### 1. Descripción y usos de shiny.
   ### 2. Referencias.
-  ### 3. Crear nuestro proyecto en el cual almacenaremos la shiny.
+  ### 3. Shinyapps.io iniciar sesión vincular con shiny.
   ### 4. Creación de la aplicación.
+---
+#Cualquier duda y/o comentario es bienvenida :)
 
-#### Antes de iniciar:
-<ul>
-<li type= disc> Se les solicita respeto a las y los participantes de este espacio.
-<li type= disc> Siéntanse libre de preguntar.
-</ul>
-
+<img src="https://cdn.verbub.com/images/cualquier-duda-me-hacen-pspsps-34618.jpg"
+width="450px" align:"center"/>}
 ---
 
 <style>
@@ -197,7 +195,7 @@ library(readxl) # importar archivos xlxs
 
 Base de datos (df) con los registro de la deuda interna por país:
 ```{r, echo = T, warning = FALSE, error = FALSE, message=FALSE, include=TRUE}
-df <- read_excel("/Users/paolamanzor/Desktop/Taller/shiny_cucea/shiny_example/deuda2.xlsx")
+df <- read_excel("/Users/paolamanzor/Desktop/Taller/shiny_cucea/shiny_cucea/inflacion.xlsx")
 
 head(df, n=7)
 ```
@@ -211,9 +209,159 @@ names(df)[names(df) == "codigo"] <- "abreviatura"
 #Renombrados
 df %>% names()
 
+#Creación de un conteo o ranking
+df %>%
+    select(pais, inflacion, abreviatura, continente, region) %>%
+    filter(inflacion!=0) %>% 
+    arrange( -as.numeric(inflacion)) %>%
+    mutate(rank = 1:n())->  ranked_by_inf
 ```
 
+---
+#Generando ranking para la visualización
+```{r, echo = T, warning = FALSE, error = FALSE, message=FALSE, include=TRUE}
+# Primeros 10 paises con mayor inflación
 
+#dput(ranked_by_inf_less$pais) 
+ranked_by_inf_top10<-ranked_by_inf %>%
+    filter(rank<=10)%>% 
+    mutate(pais=factor(pais,
+                       levels=c("Argentina",  "Angola",     "Uzbekistan", "Sudan",     
+                                "Surinam",    "Haiti",      "Turquia",    "Egipto",    
+                                "Etiopia",    "Nigeria")))
+
+ranked_by_inf_top10 %>% head(n=2)
+
+# Últimos 10 paises con menor inflación
+ranked_by_inf_less<-ranked_by_inf %>%
+    filter(rank>=165) %>% 
+    mutate(pais=factor(pais,
+                       levels=c("Emiratos Arabes Unidos", "Burkina Faso",          
+                                "Brunei",                 "Oman",                  
+                                "Liberia",                "Catar",                 
+                                "Zimbabue",               "Kuwait",                
+                                "Guinea Ecuatorial",      "Guinea Bissau")))
+
+```
+---
+#Construcción de UI
+```{r, echo = T, warning = FALSE, error = FALSE, message=FALSE, include=TRUE}
+ui <- navbarPage("inflacion mundial",
+                 theme = shinytheme("united"),
+                 tabPanel("Inicio", icon = icon("home"),
+                          "Inflación",
+                          plotlyOutput("rank")),
+                 
+                 tabPanel("Visualizaciones", icon = icon("bar-chart-o"),
+                          h2(aling= "center", "Mapa mundial de inflacion"),
+                          h4(align = "justify","El mapa interactivo muestra la inflacion por países de acuerdo a las estimaciones de gapminder"),
+                          sliderInput(inputId = "rango", 
+                                      label = "Ranking",
+                                      min = 1, 
+                                      max = 174, 
+                                      value = c(1,174),
+                                      sep = ""),
+                          submitButton(text = "Create my plot!"),
+                          plotOutput(outputId = "lineal"),
+                plotlyOutput("plot", width = "1200px"),
+                plotlyOutput("top10"),
+                plotlyOutput("less10"),
+                
+                 ),
+                tabPanel("Descarga",icon = icon("fas fa-cloud-download-alt"),
+                         downloadButton('downloadData', 'Download'),
+                         DT::dataTableOutput("table1"))
+)
+                 
+```
+
+---
+#Construcción de Server
+```{r, fig.height=5, fig.width=9}
+#Gráfico lineal
+    ranked_by_inf %>% 
+        ggplot() +
+        geom_line(aes(x = rank, y = inflacion)) +
+        theme_minimal()
+   
+                 
+```
+---
+```{r, warning = FALSE, error = FALSE, message=FALSE, include=TRUE}
+#Mapa mundial
+    #Set country boundaries as light grey
+        l <- list(color = toRGB("#d9b779"), width = 0.5)
+        #Specify map projection and options
+        g <- list(
+            showframe = FALSE,
+            showcoastlines = FALSE,
+            projection = list(type = 'orthographic'),
+            resolution = '100',
+            showcountries = TRUE,
+            countrycolor = '#d1a547',
+            showocean = TRUE,
+            oceancolor = '#3fa8d4',
+            showlakes = TRUE,
+            lakecolor = '#1fa8e0',
+            showrivers = F,
+            rivercolor = '#24AAEC')
+        
+        p <- plot_geo(df) %>%
+            add_trace(z = ~inflacion, color = ~inflacion, colors = 'Oranges',
+                      text = ~pais, locations = ~abreviatura, marker = list(line = l)) %>%
+            colorbar(title = 'Inflacion') %>%
+            layout(title = '', geo = g)
+      
+                 
+```
+
+---
+```{r, warning = FALSE, error = FALSE, message=FALSE, include=TRUE}
+
+ p <- plot_geo(df) %>%
+            add_trace(z = ~inflacion, color = ~inflacion, colors = 'Oranges',
+                      text = ~pais, locations = ~abreviatura, marker = list(line = l)) %>%
+            colorbar(title = 'Inflacion') %>%
+            layout(title = '', geo = g)
+
+        p
+   
+                 
+```
+---
+```{r, warning = FALSE, error = FALSE, message=FALSE, include=TRUE, fig.height=5, fig.width=9}
+
+rank<-ggplot(ranked_by_inf, aes(rank, group = continente,
+                                        fill = as.factor(continente), color = as.factor(continente))) +
+            geom_tile(aes(y = inflacion/2,
+                          height = inflacion,
+                          width = 0.9), alpha = 0.8, color = NA) +
+            scale_fill_manual(values=c("#d03f26", "#d06126", "#d08326",	"#d0a526","#d0c726"))+
+            coord_flip(clip = "off", expand = FALSE) +
+            scale_y_continuous(labels = scales::comma) +
+            guides(color = FALSE, fill = FALSE) +
+            labs(title='', x = "", y = " ") +
+            scale_x_reverse()+
+            theme_minimal()+
+            theme(axis.ticks.y= element_blank(),
+                  axis.text.y = element_blank())
+        
+        ggplotly(rank, dynamicTicks = TRUE)
+                 
+```
+---
+#Tabla
+```{r, warning = FALSE, error = FALSE, message=FALSE, include=TRUE, fig.height=5, fig.width=9}
+
+downloadHandler(
+        filename = 'Download.csv',
+        content = function(file) {
+            write.csv(Data[input[["table1_rows_all"]],], file, row.names = FALSE)}
+    )
+
+ranked_by_inf
+                 
+```
 ---
 
 class: middle, inverse, center
@@ -230,12 +378,9 @@ En este momento puedes realizar más preguntas que tengas y si me quieren contac
 
 .pull-right[
 .right[
-<a href="https://twitter.com/paomrom" 
-target="Twitter"><img src="https://www.trendtic.cl/wp-content/uploads/2014/08/Twitter_logo_blue.png" 
-width="60" height="40"</a><br>
-<a href="mailto:paolamanzorom@gmail.com" 
-target="Twitter"><img src="https://cdn.icon-icons.com/icons2/1826/PNG/512/4202011emailgmaillogomailsocialsocialmedia-115677_115624.png" 
-width="60" height="40"</a>
+[@paomrom](https://twitter.com/paomrom)<br/>
+[paolamanzorom@gmail.com](mailto:paolamanzorom@gmail.com)
+[https://github.com/paomrom](https://github.com/paomrom)
 
 
 ]
